@@ -80,7 +80,7 @@ fn main() {
 
     let mut router = Router::new();
 
-    light_control::bind(&mut router, &tdtool);
+    light_control::bind(&mut router, &tdtool, &workdir);
     presence::bind(&mut router, &workdir);
 
     Iron::new(router).http(("127.0.0.1", port)).unwrap();
