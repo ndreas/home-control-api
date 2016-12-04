@@ -1,9 +1,16 @@
 extern crate clap;
+#[macro_use]
+extern crate iron;
+extern crate router;
 
 use std::fs;
 use std::os::unix::fs::PermissionsExt;
 
 use clap::{App, Arg};
+use iron::prelude::*;
+use router::Router;
+
+mod light_control;
 
 fn validate_executable(value: String) -> Result<(), String> {
     let metadata    = try!(fs::metadata(&value).map_err(|_| format!("Invalid executable: {}", value)));
@@ -66,5 +73,9 @@ fn main() {
     let port    = matches.value_of("port").unwrap().parse::<u16>().unwrap();
     let workdir = matches.value_of("work-dir").unwrap();
 
-    println!("{} {} {}", tdtool, port, workdir);
+    let mut router = Router::new();
+
+    light_control::bind(&mut router, &tdtool);
+
+    Iron::new(router).http(("127.0.0.1", port)).unwrap();
 }
