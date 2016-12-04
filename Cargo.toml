@@ -6,3 +6,4 @@ publish = false
 license = "MIT"
 
 [dependencies]
+clap = "2.19.*"
