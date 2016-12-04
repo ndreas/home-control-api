@@ -8,4 +8,6 @@ license = "MIT"
 [dependencies]
 clap = "2.19.*"
 iron = "0.4.*"
+lazy_static = "0.1.*"
+regex = "0.1.*"
 router = "0.4.*"

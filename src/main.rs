@@ -1,6 +1,9 @@
 extern crate clap;
 #[macro_use]
 extern crate iron;
+#[macro_use]
+extern crate lazy_static;
+extern crate regex;
 extern crate router;
 
 use std::fs;
@@ -11,6 +14,8 @@ use iron::prelude::*;
 use router::Router;
 
 mod light_control;
+mod presence;
+mod utils;
 
 fn validate_executable(value: String) -> Result<(), String> {
     let metadata    = try!(fs::metadata(&value).map_err(|_| format!("Invalid executable: {}", value)));
@@ -76,6 +81,7 @@ fn main() {
     let mut router = Router::new();
 
     light_control::bind(&mut router, &tdtool);
+    presence::bind(&mut router, &workdir);
 
     Iron::new(router).http(("127.0.0.1", port)).unwrap();
 }
